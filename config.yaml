@@ -20,4 +20,4 @@ DQNAgent:
   epsilon_end: 0.05
   epsilon_decay: 200
   target_update: 10
-  device: "cuda:0"
+  device: "cpu"
