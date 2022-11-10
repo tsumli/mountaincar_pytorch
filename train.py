@@ -60,6 +60,7 @@ if __name__ == "__main__":
     env = gym.make("MountainCar-v0")
     config = load_config("config.yaml")
     agent_name = config.train.agent_name
+    print("agent_name:", agent_name)
     cls_agent = make_agent(agent_name)
     agent = cls_agent(env, **config[agent_name])
     train(env, agent, **config.train)

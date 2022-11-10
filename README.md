@@ -17,12 +17,14 @@ python validate.py --path path/to/pth
 
 ## Results
 Following table shows the validation results (mean and std of 100 experiments).
-|  | mean | std |
+The larger the reward is, the better.
+|  | mean reward| std reward|
 | ------------- | ------------- | ---- |
-| Q-Learning  | -141.35  | 26.834 |
-| DQN  | -140.81 | 34.515|
+| Q-Learning  | -139.0  | 21.0 |
+| DQN  | -287.8 | 24.6 |
+| DoubleDQN  | -167.3 | 20.0|
 
-In this experiment, 30000 episodes on Q-Learning and 1000 episodes on DQN, because DQN takes longer to process than Q-Learning.
+In this experiment, 300 steps on all methods, and 30000 episodes on Q-Learning and 500 episodes on DQN, because DQN takes longer to process than Q-Learning.
 
 ## Docker
 ```bash

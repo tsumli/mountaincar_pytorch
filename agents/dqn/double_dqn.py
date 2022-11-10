@@ -9,7 +9,7 @@ from .utils import ReplayMemory, Transition
 from .net import NNModule
 
 
-class DQNAgent(object):
+class DoubleDQNAgent(object):
     def __init__(
         self,
         env,
@@ -19,6 +19,7 @@ class DQNAgent(object):
         epsilon_start: float,
         epsilon_end: float,
         epsilon_decay: float,
+        target_update: int,
         device: str,
         **kwargs
     ):
@@ -26,7 +27,11 @@ class DQNAgent(object):
         space_dim = len(env.observation_space.high)
         n_actions = env.action_space.n
         policy_net = NNModule(space_dim, n_actions, device=device).to(device)
+        target_net = NNModule(space_dim, n_actions, device=device).to(device)
+        target_net.load_state_dict(policy_net.state_dict())
+        target_net.eval()
         self.policy_net = policy_net
+        self.target_net = target_net
 
         self.optimizer = optim.Adam(policy_net.parameters(), lr=lr)
         self.scheduler = None
@@ -40,6 +45,7 @@ class DQNAgent(object):
         self.epsilon_decay = epsilon_decay
         self.epsilon_start = epsilon_start
         self.epsilon_end = epsilon_end
+        self.target_update = target_update
         self.n_actions = n_actions
         self.gamma = gamma
         self.device = device
@@ -109,7 +115,7 @@ class DQNAgent(object):
 
         next_state_values = torch.zeros(self.batch_size, device=self.device)
         next_state_values[non_final_mask] = (
-            self.policy_net(non_final_next_states).max(1)[0].detach()
+            self.target_net(non_final_next_states).max(1)[0].detach()
         )
         expected_state_action_values = (next_state_values * self.gamma) + reward_batch
 
@@ -132,4 +138,6 @@ class DQNAgent(object):
                 self.scheduler.step()
         self.before_episode = episode
 
+        if self.learns_done % self.target_update == 0:
+            self.target_net.load_state_dict(self.policy_net.state_dict())
         self.learns_done += 1

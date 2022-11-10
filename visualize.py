@@ -35,6 +35,6 @@ if __name__ == "__main__":
     env = gym.make("MountainCar-v0", render_mode="human")
     agent = load_agent(args.path)
     for _ in range(5):
-        reward = visualize(agent, env, max_steps=200)
+        reward = visualize(agent, env, max_steps=300)
         print("reward: ", reward)
     env.close()

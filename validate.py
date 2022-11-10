@@ -36,7 +36,7 @@ if __name__ == "__main__":
     agent = load_agent(args.path)
     rewards = []
     for _ in tqdm(range(100)):
-        reward = validate(agent, env, max_steps=200)
+        reward = validate(agent, env, max_steps=300)
         rewards.append(reward)
 
     print("mean reward:", np.mean(rewards))
