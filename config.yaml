@@ -1,0 +1,23 @@
+train:
+  max_episodes: 30000
+  max_steps: 200
+  save_frequency: 100
+  log_dir: logs
+  agent_name: DQNAgent
+
+QAgent:
+  gamma: 0.98
+  alpha: 0.05
+  epsilon_min: 0.005
+  epsilon_decay: 4.0e-7
+  num_bins: 30
+
+DQNAgent:
+  batch_size: 256
+  lr: 5.0e-4
+  gamma: 0.98
+  epsilon_start: 1.0
+  epsilon_end: 0.05
+  epsilon_decay: 200
+  target_update: 10
+  device: "cuda:0"
