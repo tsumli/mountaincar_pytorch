@@ -3,7 +3,7 @@ train:
   max_steps: 300
   save_frequency: 100
   log_dir: logs
-  agent_name: SARSAAgent
+  agent_name: DQNAgent
 
 QAgent:
   gamma: 0.98

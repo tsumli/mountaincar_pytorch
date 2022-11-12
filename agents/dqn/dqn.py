@@ -61,7 +61,7 @@ class DQNAgent(BaseAgent):
     ):
         sample = random.random()
 
-        if eps_threshold is not None:
+        if eps_threshold is None:
             eps_threshold = self.eps_greedy.get_threshold()
         if eps_update:
             self.eps_greedy.update_step()

@@ -1,3 +1,4 @@
+from typing import Optional
 import math
 import random
 
@@ -61,11 +62,15 @@ class DoubleDQNAgent(BaseAgent):
         self.learns_done = 0
         self.before_episode = 0
 
-    def select_action(self, state):
+    def select_action(
+        self, state, eps_threshold: Optional[float] = None, eps_update: bool = True
+    ):
         sample = random.random()
 
-        eps_threshold = self.eps_greedy.get_threshold()
-        self.eps_greedy.update_step()
+        if eps_threshold is None:
+            eps_threshold = self.eps_greedy.get_threshold()
+        if eps_update:
+            self.eps_greedy.update_step()
 
         if sample > eps_threshold:
             with torch.no_grad():
