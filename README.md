@@ -1,4 +1,4 @@
-# Mountain Car (gym) using Q-Learning, PyTorch DQN
+# Mountain Car (gym) using Q-Learning, SARSA, DQN and DoubleDQN (pytorch)
 ## Steps 
 1. Change `agent_name` in config.yaml (now supporting `QAgent` and `DQNAgent`).
 2. Training.
