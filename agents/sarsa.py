@@ -6,7 +6,7 @@ from .base import BaseAgent
 from .eps_greedy import EpsGreedy
 
 
-class QAgent(BaseAgent):
+class SARSAAgent(BaseAgent):
     def __init__(
         self,
         env,
@@ -39,10 +39,14 @@ class QAgent(BaseAgent):
         return tuple(((state - self.obs_low) / self.bin_width).astype(int))
 
     def select_action(
-        self, state, eps_threshold: Optional[float] = None, eps_update: bool = True
+        self,
+        state,
+        eps_threshold: Optional[float] = None,
+        eps_update: bool = True,
+        discretize: bool = True,
     ):
-        state = self.discretize(state)
-
+        if discretize:
+            state = self.discretize(state)
         if eps_threshold is None:
             eps_threshold = self.eps_greedy.get_threshold()
         if eps_update:
@@ -56,10 +60,8 @@ class QAgent(BaseAgent):
     def learn(self, state, action, reward, next_state, episode, step):
         state = self.discretize(state)
         next_state = self.discretize(next_state)
+        next_action = self.select_action(next_state, eps_update=False, discretize=False)
 
-        td_target = reward + self.gamma * np.max(self.Q[next_state])
+        td_target = reward + self.gamma * self.Q[next_state][next_action]
         td_error = td_target - self.Q[state][action]
         self.Q[state][action] += self.alpha * td_error
-
-    def policy(self):
-        return np.argmax(self.Q, axis=2)

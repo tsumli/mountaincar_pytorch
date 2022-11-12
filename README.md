@@ -21,6 +21,7 @@ The larger the reward is, the better.
 |  | mean reward| std reward|
 | ------------- | ------------- | ---- |
 | Q-Learning  | -139.0  | 21.0 |
+| SARSA| -132.2 | 20.9 |
 | DQN  | -287.8 | 24.6 |
 | DoubleDQN  | -167.3 | 20.0|
 

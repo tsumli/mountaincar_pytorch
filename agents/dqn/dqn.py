@@ -1,24 +1,27 @@
 import math
 import random
+from typing import Optional
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from .utils import ReplayMemory, Transition
+from ..base import BaseAgent
+from ..eps_greedy import EpsGreedy
 from .net import NNModule
+from .utils import ReplayMemory, Transition
 
 
-class DQNAgent(object):
+class DQNAgent(BaseAgent):
     def __init__(
         self,
         env,
         batch_size: int,
         lr: float,
         gamma: float,
-        epsilon_start: float,
-        epsilon_end: float,
-        epsilon_decay: float,
+        eps_start: float,
+        eps_end: float,
+        eps_decay: float,
         device: str,
         **kwargs
     ):
@@ -37,9 +40,11 @@ class DQNAgent(object):
         self.memory = ReplayMemory(10000)
 
         self.batch_size = batch_size
-        self.epsilon_decay = epsilon_decay
-        self.epsilon_start = epsilon_start
-        self.epsilon_end = epsilon_end
+        self.eps_greedy = EpsGreedy(
+            eps_start=eps_start,
+            eps_end=eps_end,
+            eps_decay=eps_decay,
+        )
         self.n_actions = n_actions
         self.gamma = gamma
         self.device = device
@@ -51,14 +56,16 @@ class DQNAgent(object):
         self.learns_done = 0
         self.before_episode = 0
 
-    def select_action(self, state):
+    def select_action(
+        self, state, eps_threshold: Optional[float] = None, eps_update: bool = True
+    ):
         sample = random.random()
 
-        eps_threshold = self.epsilon_end + (
-            self.epsilon_start - self.epsilon_end
-        ) * math.exp(-1.0 * self.steps_done / self.epsilon_decay)
+        if eps_threshold is not None:
+            eps_threshold = self.eps_greedy.get_threshold()
+        if eps_update:
+            self.eps_greedy.update_step()
 
-        self.steps_done += 1
         if sample > eps_threshold:
             with torch.no_grad():
                 self.policy_net.eval()
