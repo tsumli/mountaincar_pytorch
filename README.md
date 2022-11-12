@@ -1,6 +1,6 @@
 # Mountain Car (gym) using numpy and pytorch
 ## Steps 
-1. Choose an agent f("QAgent", "SARSAAgent", "DQNAgent", "DoubeDQNAgent") and change `agent_name` in config.yaml.
+1. Choose an agent ("QAgent", "SARSAAgent", "DQNAgent", "DoubeDQNAgent") and change `agent_name` in config.yaml.
 2. Training.
 ```bash
 python train.py
